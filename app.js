@@ -15,6 +15,7 @@ const tasksCollectionsRouter = require("./controllers/tasksCollections")
 const tasksRouter = require("./controllers/tasks")
 const tasksListsRouter = require("./controllers/tasksLists")
 const path = require("path")
+const articlesRouter = require("./controllers/articles")
 
 
 logger.info('connecting to', config.MONGODB_URI)
@@ -41,6 +42,7 @@ app.use("/api/login", loginRouter)
 app.use("/api/tasks-lists", tasksListsRouter)
 app.use("/api/tasks-collections", tasksCollectionsRouter)
 app.use("/api/tasks", tasksRouter)
+app.use("/api/articles", articlesRouter)
 
 app.get('*', (req,res) =>{
   // console.log("Here");
