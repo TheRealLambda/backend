@@ -28,8 +28,9 @@ articlesRouter.get("/:id", async (req, res) => {
 articlesRouter.post("/", upload.single("img"), async (req, res) => {
   const img = req.file
   console.log(img)
-  const { title, text, tag } = req.body
-  const createdArticle = await Article.create({title, text, tags: [tag], image: img.filename})
+  const { title, text, tags } = req.body
+  console.log(JSON.parse(tags));
+  const createdArticle = await Article.create({title, text, tags: JSON.parse(tags), image: img.filename})
   res.send(createdArticle)
 })
 
