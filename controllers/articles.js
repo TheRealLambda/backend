@@ -1,8 +1,18 @@
 const articlesRouter = require("express").Router()
 const Article = require("../models/article")
+const multer = require("multer")
+const storage = multer.diskStorage({
+  destination: (req, file, callback) => {
+    callback(null, "uploads")
+  },
+  filename: (req, file, callback) => {
+    callback(null, Date.now()+"_"+file.originalname)
+  }
+})
+const upload = multer({storage})
 
 articlesRouter.get("/", async (req, res) => {
-  const articles = await Article.find()
+  const articles = await Article.find().populate("tags")
   console.log(articles);
   res.send(articles)
 })
@@ -15,10 +25,13 @@ articlesRouter.get("/:id", async (req, res) => {
   res.send(article)
 })
 
-articlesRouter.post("/", async (req, res) => {
-  const body = req.body
-  const createdArticle = await Article.create(body)
+articlesRouter.post("/", upload.single("img"), async (req, res) => {
+  const img = req.file
+  console.log(img)
+  const { title, text, tag } = req.body
+  const createdArticle = await Article.create({title, text, tags: [tag], image: img.filename})
   res.send(createdArticle)
 })
+
 
 module.exports = articlesRouter
